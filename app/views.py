@@ -47,6 +47,24 @@ def upload():
     return render_template('upload.html', form=form)
 
 
+
+def get_upload_images():
+    path = './app/static/uploads'
+    images = []
+    for root, dirs, files in os.walk(path):
+        for file in files:
+            #print('File: %s' % file)
+            images.append(file)
+    return images
+
+@app.route('/files')
+def files():
+    if not session.get('logged_in'):
+        abort(401)
+    else:
+        images = get_upload_images()
+        return render_template('files.html', images=images)
+
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     error = None
